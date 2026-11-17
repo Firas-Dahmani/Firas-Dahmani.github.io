@@ -1,0 +1,8 @@
+Fonts used by this page, served from this folder (no CDN, no external requests):
+
+- Inter (weights 500, 700, 800, latin subset)
+- JetBrains Mono (weights 500, 700, latin subset)
+- IBM Plex Sans Arabic (weight 500, arabic subset), for the right-to-left sample sentence
+
+All three families are published under the SIL Open Font License 1.1 (https://openfontlicense.org).
+The woff2 files are the Fontsource subsets already used by the reel engine (engine/public/fonts).

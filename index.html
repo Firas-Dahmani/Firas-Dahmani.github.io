@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Firas Dahmani · I add AI features to products that already have users</title>
+<meta name="description" content="I add AI features to products that already have users. Proof from Readdly, where I'm CTO: OCR, voice, pronunciation scoring and summaries in production.">
+<meta name="theme-color" content="#0a0f1d">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:,">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://firas-dahmani.github.io/">
+<meta property="og:site_name" content="Firas Dahmani">
+<meta property="og:title" content="I add AI features to products that already have users.">
+<meta property="og:description" content="Proof from Readdly, where I'm CTO: OCR, voice, pronunciation scoring and summaries in production. We start with a 15-minute call.">
+<meta property="og:image" content="https://firas-dahmani.github.io/assets/cover.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1080">
+<meta property="og:image:height" content="1920">
+<meta property="og:image:alt" content="An AI avatar of Firas Dahmani above the headline: I add AI features to products that already have users.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="I add AI features to products that already have users.">
+<meta name="twitter:description" content="Proof from Readdly, where I'm CTO: OCR, voice, pronunciation scoring and summaries in production.">
+<meta name="twitter:image" content="https://firas-dahmani.github.io/assets/cover.jpg">
+
+<link rel="preload" href="assets/fonts/inter-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+
+<style>
+@font-face{font-family:"Inter";font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/inter-latin-500-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Inter";font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/inter-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Inter";font-style:normal;font-weight:800;font-display:swap;src:url(assets/fonts/inter-latin-800-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/jetbrains-mono-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"IBM Plex Sans Arabic";font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/ibm-plex-sans-arabic-arabic-500-normal.woff2) format("woff2");unicode-range:U+0600-06FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE80-FEFC}
+
+:root{
+  --bg:#0a0f1d;--card:#0f172a;--card-2:#0b1222;--line:#1f2b41;
+  --ink:#f3f6fa;--muted:#a3afc2;--dim:#67768d;
+  --cyan:#2bd0e8;--blue:#5aa9ff;--ok:#3dd68c;--bad:#ff6161;--warn:#f6b94a;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,"SFMono-Regular",monospace;
+  --ar:"IBM Plex Sans Arabic","Noto Naskh Arabic","Segoe UI",Tahoma,sans-serif;
+  --wrap:1080px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;color:var(--ink);font:500 17px/1.6 var(--sans);
+  background:
+    radial-gradient(900px 520px at 85% -8%,rgba(43,208,232,.13),transparent 62%),
+    radial-gradient(760px 480px at -12% 26%,rgba(90,169,255,.08),transparent 64%),
+    var(--bg);
+  background-repeat:no-repeat;
+}
+img,video,svg{display:block;max-width:100%}
+a{color:inherit}
+p{margin:0 0 1em}
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.025em;text-wrap:balance}
+code{font-family:var(--mono)}
+.wrap{width:min(100% - 40px,var(--wrap));margin-inline:auto}
+.skip{position:absolute;left:12px;top:-60px;background:var(--cyan);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;z-index:10;text-decoration:none}
+.skip:focus{top:12px}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:6px}
+
+/* labels */
+.kicker{font:700 13px/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin:0 0 14px}
+.hl{color:var(--cyan)}
+section{padding-block:56px;border-top:1px solid rgba(31,43,65,.7)}
+section:first-of-type{border-top:0}
+h2{font-size:clamp(1.75rem,5.8vw,2.55rem);line-height:1.1;margin-bottom:16px}
+h3{font-size:1.15rem;line-height:1.25;letter-spacing:-.015em}
+.lead{color:var(--muted);font-size:1.06rem;max-width:62ch}
+.fine{color:var(--muted);font-size:.9rem;line-height:1.5}
+
+/* buttons */
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 26px;border-radius:999px;font:700 1.05rem/1 var(--sans);text-decoration:none;border:2px solid var(--cyan);transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+.btn svg{width:22px;height:22px;flex:none}
+.btn-primary{background:linear-gradient(90deg,var(--cyan),var(--blue));color:var(--bg);border-color:transparent;box-shadow:0 10px 34px rgba(43,208,232,.28)}
+.btn-primary:hover{box-shadow:0 12px 40px rgba(43,208,232,.42);transform:translateY(-1px)}
+.btn-ghost{color:var(--ink);background:rgba(43,208,232,.06)}
+.btn-ghost:hover{background:rgba(43,208,232,.14);transform:translateY(-1px)}
+.btn:active{transform:translateY(1px)}
+.btns .btn{flex:1 1 220px}
+
+/* hero */
+.hero{padding-top:34px;padding-bottom:52px}
+.who{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.avatar{width:68px;height:68px;border-radius:50%;border:3px solid var(--cyan);box-shadow:0 0 26px rgba(43,208,232,.35);flex:none;object-fit:cover}
+.who p{margin:0}
+.who .name{font-weight:800;font-size:1.08rem;letter-spacing:-.01em}
+.who .meta{font:500 .82rem/1.4 var(--mono);color:var(--muted)}
+.who .ai{display:inline-block;margin-top:5px;font:700 .72rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(43,208,232,.5);border-radius:999px;padding:4px 9px}
+h1{font-size:clamp(2.35rem,9.6vw,4.4rem);line-height:1.03;letter-spacing:-.035em;max-width:16ch}
+.hero .lead{margin-top:22px;font-size:1.12rem}
+.hero .start{color:var(--muted);font-size:.95rem;margin:0}
+
+/* video */
+.hero-grid{display:grid;gap:36px}
+.hero-text{min-width:0}
+.narrow > *{max-width:760px}
+.vid{margin:0;justify-self:center;width:min(100%,320px)}
+.vid .frame{position:relative;border-radius:28px;padding:6px;background:linear-gradient(160deg,rgba(43,208,232,.7),rgba(90,169,255,.25) 40%,rgba(31,43,65,.9));box-shadow:0 18px 60px rgba(43,208,232,.14)}
+.vid video{width:100%;aspect-ratio:9/16;height:auto;border-radius:22px;background:var(--card-2);object-fit:cover}
+.vid figcaption{margin-top:12px;text-align:center;font:500 .82rem/1.55 var(--mono);color:var(--muted)}
+.vid figcaption a{color:var(--cyan);text-underline-offset:3px}
+details.transcript{margin-top:22px;border:1px solid var(--line);border-radius:16px;background:rgba(15,23,42,.6)}
+details.transcript summary{cursor:pointer;padding:14px 18px;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+details.transcript summary::-webkit-details-marker{display:none}
+details.transcript summary::after{content:"+";font:700 1.3rem/1 var(--mono);color:var(--cyan)}
+details.transcript[open] summary::after{content:"\2212"}
+details.transcript .tx{padding:0 18px 6px;color:var(--muted);font-size:.96rem}
+details.transcript .tx p{margin:0 0 .8em}
+
+/* proof: pipeline */
+.pipe{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:14px}
+.pipe li{position:relative;display:grid;grid-template-columns:auto 1fr;gap:4px 16px;align-items:center;align-content:start;padding:18px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,rgba(15,23,42,.95),rgba(11,18,34,.95))}
+.pipe .num{grid-row:span 3;width:52px;height:52px;border-radius:50%;background:var(--cyan);color:var(--bg);display:grid;place-items:center;font:800 1.35rem/1 var(--mono);box-shadow:0 0 22px rgba(43,208,232,.35)}
+.pipe h3{display:flex;align-items:center;gap:10px}
+.pipe h3 svg{width:24px;height:24px;color:var(--cyan)}
+.pipe p{margin:0;color:var(--muted);font-size:.98rem}
+.pipe code{display:block;margin-top:6px;padding:10px 12px;border-radius:12px;background:var(--card-2);border:1px solid var(--line);color:var(--ink);font-size:.95rem;line-height:1.5}
+.pipe .wave{display:flex;gap:4px;align-items:center;height:26px;margin-top:6px}
+.pipe .wave i{display:block;width:5px;border-radius:3px;background:var(--cyan);opacity:.85}
+.pipe li:not(:last-child)::after{content:"";position:absolute;left:43px;bottom:-15px;width:3px;height:16px;background:var(--cyan);border-radius:2px;opacity:.55}
+
+/* proof: languages */
+.block{margin-top:34px}
+.block h3{margin-bottom:12px}
+.langs{display:grid;gap:10px;max-width:640px}
+.lang{margin:0;display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:rgba(15,23,42,.85);font-size:1.05rem}
+.lang b{font:700 .8rem/1 var(--mono);letter-spacing:.06em;color:var(--bg);background:var(--cyan);padding:6px 8px;border-radius:8px;flex:none}
+.lang.rtl{flex-direction:row-reverse;text-align:right}
+.lang.rtl .t{font:500 1.18rem/1.5 var(--ar)}
+.lang i{margin-inline-start:auto;font:700 .72rem/1 var(--mono);letter-spacing:.08em;color:var(--cyan);border:1px solid rgba(43,208,232,.5);border-radius:999px;padding:4px 8px;font-style:normal}
+.lang.rtl i{margin-inline-start:0;margin-inline-end:auto}
+
+/* proof: engines */
+.engines{list-style:none;margin:0;padding:0;display:grid;gap:10px;max-width:760px}
+.engines li{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:rgba(15,23,42,.85)}
+.engines .job{font-weight:800;letter-spacing:-.01em}
+.engines .eng{grid-column:1;color:var(--muted);font-size:.92rem}
+.tag{grid-column:2;grid-row:1 / span 2;font:700 .86rem/1 var(--mono);letter-spacing:.04em;padding:7px 11px;border-radius:10px;color:var(--bg)}
+.tag.paid{background:var(--warn)}
+.tag.local{background:var(--ok)}
+.stats{display:grid;gap:12px;margin-top:22px}
+.stat{padding:18px;border:1px solid rgba(43,208,232,.35);border-radius:18px;background:rgba(43,208,232,.06)}
+.stat b{display:block;font:800 2.2rem/1 var(--mono);color:var(--cyan);letter-spacing:-.03em;margin-bottom:8px}
+.stat span{color:var(--muted);font-size:.95rem}
+
+/* proof: receipts */
+.receipts{display:grid;gap:12px;max-width:760px}
+.rc{display:grid;grid-template-columns:auto 1fr;gap:2px 16px;padding:16px 18px;border:1px solid var(--line);border-radius:18px;background:rgba(15,23,42,.85)}
+.rc .ic{grid-row:span 2;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font:800 1.05rem/1 var(--mono)}
+.rc .ic svg{width:26px;height:26px}
+.rc h3{font-size:1.05rem}
+.rc p{margin:0;color:var(--muted);font-size:.97rem}
+.rc.bad{border-color:rgba(255,97,97,.55)} .rc.bad .ic{background:rgba(255,97,97,.16);color:var(--bad)}
+.rc.warn{border-color:rgba(246,185,74,.55)} .rc.warn .ic{background:rgba(246,185,74,.16);color:var(--warn)}
+.rc.ok{border-color:rgba(61,214,140,.55)} .rc.ok .ic{background:rgba(61,214,140,.16);color:var(--ok)}
+.after{max-width:760px;margin-top:18px}
+.after p{margin:0 0 .8em;color:var(--muted)}
+.after p strong{color:var(--ink)}
+
+/* can add */
+.grid{display:grid;gap:14px;margin-top:22px}
+.card{padding:20px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,rgba(15,23,42,.95),rgba(11,18,34,.95))}
+.card h3{margin-bottom:8px}
+.card p{margin:0 0 10px;color:var(--muted);font-size:.98rem}
+.card .at{margin:0;padding-top:10px;border-top:1px dashed rgba(103,118,141,.45);font:500 .84rem/1.5 var(--mono);color:var(--cyan)}
+.sub{margin:34px 0 0;font:700 .85rem/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* how */
+.steps{list-style:none;margin:26px 0 0;padding:0;position:relative}
+.steps li{position:relative;display:grid;grid-template-columns:56px 1fr;gap:0 18px;padding-bottom:26px}
+.steps li:last-child{padding-bottom:0}
+.steps li:not(:last-child)::before{content:"";position:absolute;left:26px;top:58px;bottom:2px;width:3px;border-radius:2px;background:var(--cyan);opacity:.6}
+.steps .num{width:56px;height:56px;border-radius:50%;background:var(--cyan);color:var(--bg);display:grid;place-items:center;font:800 1.5rem/1 var(--mono);box-shadow:0 0 24px rgba(43,208,232,.35)}
+.steps h3{font-size:1.35rem;padding-top:6px}
+.steps p{margin:4px 0 0;color:var(--cyan);font-weight:700}
+.price{display:inline-flex;align-items:center;gap:12px;margin-top:30px;padding:14px 22px;border:2px solid var(--cyan);border-radius:999px;background:rgba(43,208,232,.09);font:500 1.02rem/1.3 var(--mono);box-shadow:0 0 28px rgba(43,208,232,.16)}
+.price::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);flex:none}
+
+/* contact */
+.contact-list{display:grid;gap:12px;margin-top:24px;max-width:640px}
+.cl{display:grid;grid-template-columns:auto 1fr;gap:0 16px;align-items:center;padding:16px 18px;border:1px solid var(--line);border-radius:18px;background:rgba(15,23,42,.9);text-decoration:none}
+.cl:hover{border-color:var(--cyan);background:rgba(43,208,232,.07)}
+.cl svg{width:30px;height:30px;color:var(--cyan);grid-row:span 2}
+.cl b{font-size:1.05rem}
+.cl span{color:var(--muted);font:500 .92rem/1.4 var(--mono);overflow-wrap:anywhere}
+
+/* footer */
+footer{padding-block:36px 56px;border-top:1px solid rgba(31,43,65,.7);color:var(--muted);font-size:.92rem}
+footer p{margin:0 0 .8em;max-width:70ch}
+footer .ai-note{display:inline-flex;gap:10px;align-items:center;color:var(--ink);font-weight:700;padding:10px 16px;border:1px solid rgba(43,208,232,.55);border-radius:999px;background:rgba(43,208,232,.07)}
+footer .ai-note::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--cyan);flex:none}
+
+/* wider screens */
+@media (min-width:720px){
+  body{font-size:18px}
+  .wrap{width:min(100% - 64px,var(--wrap))}
+  section{padding-block:76px}
+  .hero{padding-top:56px;padding-bottom:72px}
+  .avatar{width:84px;height:84px}
+  .btns .btn{flex:0 0 auto}
+  .pipe{grid-template-columns:repeat(3,1fr);gap:26px}
+  .pipe li{grid-template-columns:1fr;gap:10px;padding:22px}
+  .pipe .num{grid-row:auto}
+  .pipe li:not(:last-child)::after{left:auto;right:-27px;top:46px;bottom:auto;width:28px;height:3px}
+  .stats{grid-template-columns:repeat(2,1fr);max-width:760px}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .grid.f .card:last-child{grid-column:1/-1}
+  .engines li{grid-template-columns:230px 1fr auto;padding:16px 20px}
+  .engines .eng{grid-column:2;font-size:.98rem}
+  .tag{grid-column:3;grid-row:1}
+}
+@media (min-width:900px){
+  .hero-grid{grid-template-columns:minmax(0,1fr) 320px;gap:56px;align-items:center}
+}
+@media (min-width:1000px){
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .grid.f{grid-template-columns:repeat(6,1fr)}
+  .grid.f .card{grid-column:span 2}
+  .grid.f .card:nth-child(n+4){grid-column:span 3}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<main id="main">
+
+<!-- HERO -->
+<header class="wrap hero">
+  <div class="hero-grid">
+  <div class="hero-text">
+  <div class="who">
+    <img class="avatar" src="assets/avatar.jpg" width="84" height="84" alt="AI avatar of Firas Dahmani">
+    <div>
+      <p class="name">Firas Dahmani</p>
+      <p class="meta">CTO of Readdly · Sousse, Tunisia</p>
+      <span class="ai">AI avatar</span>
+    </div>
+  </div>
+  <h1>I add <span class="hl">AI</span> features to products that already have <span class="hl">users</span>.</h1>
+  <p class="lead">I'm a software engineer and the CTO of Readdly, a reading app for kids with dyslexia. I run the AI services behind it in production.</p>
+  <div class="btns">
+    <a class="btn btn-primary" href="https://ig.me/m/dahmanifiras">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.2 6.8v.1"/></svg>
+      DM me on Instagram
+    </a>
+    <a class="btn btn-ghost" href="https://wa.me/21627177090">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.4 8.4 0 1 1 21 11.5Z"/></svg>
+      Message on WhatsApp
+    </a>
+    <a class="btn btn-ghost" href="mailto:firas1dahmani@gmail.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 8 8 6 8-6"/></svg>
+      Email me
+    </a>
+  </div>
+  <p class="start">We start with a 15-minute call. The price is quoted after it.</p>
+  </div>
+  <figure class="vid">
+    <div class="frame">
+      <video controls preload="none" playsinline poster="assets/cover.jpg" aria-label="Proof video, about one minute. AI avatar and voice.">
+        <source src="assets/proof1-720.mp4" type="video/mp4">
+        Your browser can't play this video. <a href="assets/proof1.mp4">Download it</a>.
+      </video>
+    </div>
+    <figcaption>AI avatar and voice. The work is real.<br><a href="assets/proof1.mp4" download>Full quality, 1080×1920, 41 MB</a></figcaption>
+  </figure>
+  </div>
+</header>
+
+<!-- VIDEO TRANSCRIPT (the video itself sits in the hero) -->
+<section id="video" aria-labelledby="h-video">
+  <div class="wrap narrow">
+    <p class="kicker">The short version</p>
+    <h2 id="h-video">The video, in words</h2>
+    <p class="lead">About a minute: what Readdly does, what runs behind it, what broke once, and how we would start. Every line is here if you would rather read it.</p>
+    <details class="transcript">
+      <summary>Read the transcript</summary>
+      <div class="tx">
+        <p>I add AI features to products that already have users.</p>
+        <p>My proof is Readdly. A reading app for kids with dyslexia.</p>
+        <p>A kid snaps a photo of a page. OCR turns it into text. Then a voice reads it back. In English, French and Arabic. Right to left included.</p>
+        <p>Behind it: an API, and AI services for OCR, text to speech, speech to text, pronunciation scoring and summaries. I'm the CTO, and all of it runs in production. Two of them call cloud APIs. The rest run on our own server.</p>
+        <p>A server setting once undid the scoring calibration. The service looked healthy, but in a fourteen clip test, three of six wrong answers passed. I put the right setting back, and none did.</p>
+        <p>It starts with a fifteen minute call, where we pick one feature. Then a paid two day test, or a scoped sprint. Then it ships to production, with a handover. I quote the price after the call.</p>
+        <p>I'm Firas, CTO of Readdly, from Sousse, Tunisia. Message me on WhatsApp, or DM the word AI on Instagram.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- READDLY PROOF -->
+<section id="proof" aria-labelledby="h-proof">
+  <div class="wrap">
+    <p class="kicker">Proof</p>
+    <h2 id="h-proof">What I run at Readdly</h2>
+    <p class="lead">Readdly helps children with dyslexia read. A child photographs a page, the app reads the text out of the photo, and a voice reads it back. It works in English, French and Arabic, including right-to-left layout.</p>
+
+    <ol class="pipe" aria-label="How a page becomes speech">
+      <li>
+        <span class="num">1</span>
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a2 2 0 0 1 2-2h2l1.5-2h5L16 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><circle cx="12" cy="12.5" r="3.5"/></svg>Photo</h3>
+        <p>A kid snaps a photo of a page.</p>
+      </li>
+      <li>
+        <span class="num">2</span>
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>OCR</h3>
+        <p>OCR turns it into text.</p>
+        <code>The cat sat<br>on the mat.</code>
+      </li>
+      <li>
+        <span class="num">3</span>
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5Z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></svg>Voice</h3>
+        <p>Then a voice reads it back.</p>
+        <span class="wave" aria-hidden="true"><i style="height:8px"></i><i style="height:16px"></i><i style="height:24px"></i><i style="height:12px"></i><i style="height:20px"></i><i style="height:26px"></i><i style="height:14px"></i><i style="height:22px"></i><i style="height:10px"></i><i style="height:18px"></i></span>
+      </li>
+    </ol>
+
+    <div class="block">
+      <h3>Three languages, one of them right-to-left</h3>
+      <div class="langs" role="group" aria-label="The same sentence in English, French and Arabic">
+        <p class="lang"><b>EN</b><span class="t" lang="en">The cat sat on the mat.</span></p>
+        <p class="lang"><b>FR</b><span class="t" lang="fr">Le chat est assis sur le tapis.</span></p>
+        <p class="lang rtl"><b>AR</b><span class="t" lang="ar" dir="rtl">جلس القط على السجادة.</span><i>RTL</i></p>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>What runs behind it</h3>
+      <p class="fine" style="margin-bottom:14px">An API in front, and these AI services behind it. CLOUD means an outside API. LOCAL means it runs on our own server.</p>
+      <ul class="engines">
+        <li><span class="job">OCR</span><span class="eng">Mistral OCR</span><span class="tag paid">CLOUD</span></li>
+        <li><span class="job">Text-to-speech</span><span class="eng">ElevenLabs, metered</span><span class="tag paid">CLOUD</span></li>
+        <li><span class="job">Speech-to-text</span><span class="eng">faster-whisper large-v3</span><span class="tag local">LOCAL</span></li>
+        <li><span class="job">Pronunciation scoring</span><span class="eng">wav2vec2 XLSR-53</span><span class="tag local">LOCAL</span></li>
+        <li><span class="job">Summaries</span><span class="eng">BART for English, T5 for French, mT5 for Arabic</span><span class="tag local">LOCAL</span></li>
+      </ul>
+      <div class="stats">
+        <div class="stat"><b>21</b><span>containers in production. That is the whole stack.</span></div>
+        <div class="stat"><b>3</b><span>languages: English, French and Arabic, which reads right to left.</span></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>What broke once, what it cost, what fixed it</h3>
+      <div class="receipts">
+        <div class="rc bad">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 2.8 19.5h18.4Z"/><path d="M12 10v4.5M12 17.4v.1"/></svg></span>
+          <h3>What broke</h3>
+          <p>A server setting undid the scoring calibration. The service looked healthy, so nothing flagged it.</p>
+        </div>
+        <div class="rc warn">
+          <span class="ic">3/6</span>
+          <h3>What it cost</h3>
+          <p>In a 14-clip test, 3 of 6 wrong answers were accepted as correct.</p>
+        </div>
+        <div class="rc ok">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+          <h3>What fixed it</h3>
+          <p>I put the right setting back. Wrong answers accepted: 0 of 6. The trade: correct answers accepted went from 8 of 8 to 6 of 8 on the same clips. I wrote that down too.</p>
+        </div>
+      </div>
+      <div class="after">
+        <p><strong>Another time:</strong> a rebuilt image shipped without its model files. Pronunciation scoring failed for every language for about a day while the health check stayed green. Now the deploy gate waits until the models are loaded, and a failed deploy rolls back.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT I CAN ADD -->
+<section id="add" aria-labelledby="h-add">
+  <div class="wrap">
+    <p class="kicker">What I can add</p>
+    <h2 id="h-add">Features I have already shipped</h2>
+    <p class="lead">Each item below has shipped in Readdly's production stack. I don't list anything I haven't built.</p>
+
+    <p class="sub">The features</p>
+    <div class="grid f">
+      <article class="card">
+        <h3>Text from photos and PDFs</h3>
+        <p>OCR. A photo or a PDF goes in, plain text comes out.</p>
+        <p class="at">At Readdly: Mistral OCR, a cloud API.</p>
+      </article>
+      <article class="card">
+        <h3>Text to speech</h3>
+        <p>Reads text aloud in English, French and Arabic.</p>
+        <p class="at">At Readdly: ElevenLabs, metered.</p>
+      </article>
+      <article class="card">
+        <h3>Speech to text</h3>
+        <p>Turns a recording into text.</p>
+        <p class="at">At Readdly: faster-whisper large-v3 on our own server, no per-use fee.</p>
+      </article>
+      <article class="card">
+        <h3>Pronunciation scoring</h3>
+        <p>Scores how a child says a word, in English, French and Arabic.</p>
+        <p class="at">At Readdly: wav2vec2 on our own server, tuned and tested on test clips.</p>
+      </article>
+      <article class="card">
+        <h3>Summaries</h3>
+        <p>Short or long, as a paragraph or as bullet points, in English, French and Arabic.</p>
+        <p class="at">At Readdly: BART, T5 and mT5 on our own server.</p>
+      </article>
+    </div>
+
+    <p class="sub">Around the feature</p>
+    <div class="grid">
+      <article class="card">
+        <h3>Getting it live safely</h3>
+        <p>Every build is tagged with the commit it came from. If the health check fails, the previous version comes back on its own.</p>
+        <p class="at">At Readdly: every deploy.</p>
+      </article>
+      <article class="card">
+        <h3>Checking that it works</h3>
+        <p>I test with clips that include wrong answers, which should fail. That is how I found the setting that let 3 of 6 through.</p>
+        <p class="at">At Readdly: pronunciation scoring.</p>
+      </article>
+      <article class="card">
+        <h3>Knowing what it costs</h3>
+        <p>Paid and free models are listed in one place. The engine for each voice job is pinned, and the paid key has no permission for transcription, so a wrong setting fails instead of starting a new bill.</p>
+        <p class="at">At Readdly: text-to-speech and speech-to-text.</p>
+      </article>
+    </div>
+    <p class="fine" style="margin-top:22px">Readdly facts come from its own code notes and infrastructure notes, last verified 16 August 2026.</p>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" aria-labelledby="h-how">
+  <div class="wrap">
+    <p class="kicker">How it works</p>
+    <h2 id="h-how">Three steps</h2>
+    <ol class="steps">
+      <li>
+        <span class="num">1</span>
+        <div><h3>15-minute call</h3><p>We pick one feature.</p></div>
+      </li>
+      <li>
+        <span class="num">2</span>
+        <div><h3>Paid 2-day test</h3><p>Or a scoped sprint.</p></div>
+      </li>
+      <li>
+        <span class="num">3</span>
+        <div><h3>Shipped to production</h3><p>With a handover.</p></div>
+      </li>
+    </ol>
+    <p class="price">Price: quoted after the call</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" aria-labelledby="h-contact">
+  <div class="wrap">
+    <p class="kicker">Contact</p>
+    <h2 id="h-contact">Send me a message</h2>
+    <p class="lead">Say which product and which feature you have in mind. That is enough for the first call.</p>
+    <div class="contact-list">
+      <a class="cl" href="https://ig.me/m/dahmanifiras">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.2 6.8v.1"/></svg>
+        <b>DM me on Instagram</b><span>Send the word AI to @dahmanifiras</span>
+      </a>
+      <a class="cl" href="https://wa.me/21627177090">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.4 8.4 0 1 1 21 11.5Z"/></svg>
+        <b>WhatsApp</b><span>+216 27 177 090</span>
+      </a>
+      <a class="cl" href="mailto:firas1dahmani@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 8 8 6 8-6"/></svg>
+        <b>Email</b><span>firas1dahmani@gmail.com</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="ai-note">AI avatar and voice. The work is real.</p>
+    <p>The avatar and the voice in the videos are AI. The portrait at the top of this page is the same avatar. Firas Dahmani is the CTO of Readdly.</p>
+    <p>Firas Dahmani · Sousse, Tunisia. This page has no cookies, no trackers and no analytics, and it loads nothing from other sites.</p>
+  </div>
+</footer>
+</body>
+</html>

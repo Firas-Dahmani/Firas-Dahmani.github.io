@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Voice AI receptionist for UK law firms: live demo · Firas Dahmani</title>
+<meta name="description" content="Talk to a voice AI receptionist for a UK law firm in your browser. It qualifies the enquiry, takes the conflict-check name, flags deadlines and writes the intake note while you talk.">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Call a law firm's AI receptionist (live demo)">
+<meta property="og:description" content="Retell voice agent for UK law-firm intake: qualifies, runs the conflict-check question, flags deadlines, writes the intake note live. Built by Firas Dahmani.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:,">
+<link rel="preload" href="../../assets/fonts/bricolage-grotesque-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/ibm-plex-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:600;font-display:swap;src:url(../../assets/fonts/bricolage-grotesque-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:800;font-display:swap;src:url(../../assets/fonts/bricolage-grotesque-latin-800-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:500;font-display:swap;src:url(../../assets/fonts/ibm-plex-mono-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:700;font-display:swap;src:url(../../assets/fonts/ibm-plex-mono-latin-700-normal.woff2) format("woff2")}
+:root{--paper:#EFE8DA;--card:#FBF8F2;--ink:#17140F;--ink2:#5E564A;--rule:#DCD3C2;--red:#C0341B;--saffron:#F4BF2A;--marker:#FFD84D;--olive:#3F6B2A;--term:#17140F;--term-text:#F3EDE1;--wrap:1080px;--gut:40px;--bw:3px;--sh:6px;--mono:"IBM Plex Mono",ui-monospace,Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--paper);color:var(--ink)}
+body{font:600 17px/1.5 "Bricolage Grotesque",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{width:min(100% - var(--gut),var(--wrap));margin-inline:auto}
+.skip{position:absolute;left:-9999px}.skip:focus{left:12px;top:12px;background:var(--marker);padding:8px}
+header{padding:56px 0 24px}
+.kicker{display:inline-block;font:700 .8rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:8px 11px 9px;border:var(--bw) solid var(--ink);background:var(--marker)}
+h1{font-weight:800;font-size:clamp(2.3rem,7.6vw,3.9rem);line-height:1.02;letter-spacing:-.035em;margin:18px 0 14px;max-width:16ch}
+h2{font-weight:800;font-size:clamp(1.6rem,4.8vw,2.3rem);line-height:1.06;letter-spacing:-.03em;margin-bottom:14px}
+.lede{font-size:1.12rem;max-width:62ch;color:var(--ink)}
+.note{margin-top:12px;font:500 .86rem/1.5 var(--mono);color:var(--ink2);max-width:70ch}
+mark{background:var(--marker);padding:0 .15em}
+.card{background:var(--card);border:var(--bw) solid var(--ink);border-radius:4px;box-shadow:var(--sh) var(--sh) 0 var(--ink);padding:20px}
+.stage{display:grid;grid-template-columns:1fr;gap:22px;margin-block:18px 40px}
+@media (min-width:900px){.stage{grid-template-columns:1.05fr .95fr}}
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+button{font:800 1.05rem/1 "Bricolage Grotesque",system-ui,sans-serif;cursor:pointer;border:var(--bw) solid var(--ink);border-radius:4px;padding:15px 20px;box-shadow:4px 4px 0 var(--ink);transition:transform .06s}
+button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+button:disabled{opacity:.45;cursor:not-allowed}
+#start{background:var(--ink);color:var(--card);font-size:1.2rem;padding:18px 26px}
+#start .dot{display:inline-block;width:.7em;height:.7em;border-radius:50%;background:var(--red);margin-right:.5em;vertical-align:.02em}
+#end{background:var(--red);color:var(--card)}
+#mute{background:var(--card);color:var(--ink)}
+.status{display:flex;align-items:center;gap:10px;margin-top:16px;font:700 .9rem/1.3 var(--mono)}
+.lamp{width:12px;height:12px;border-radius:50%;background:var(--rule);border:2px solid var(--ink);flex:none}
+.lamp.live{background:#2fae4e}.lamp.talk{background:var(--saffron);animation:pulse .9s infinite}
+@keyframes pulse{50%{transform:scale(1.35)}}
+.clock{margin-left:auto;font:700 .9rem var(--mono);color:var(--ink2)}
+.try{margin-top:18px;border-top:2px dashed var(--rule);padding-top:14px}
+.try b{font:700 .78rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.try ul{list-style:none;display:grid;gap:8px;margin-top:10px}
+.try li{font-size:.98rem;padding-left:18px;position:relative}
+.try li:before{content:"\201C";position:absolute;left:0;color:var(--red);font-weight:800}
+.term{margin-top:18px;background:var(--term);color:var(--term-text);border-radius:4px;border:var(--bw) solid var(--ink);padding:14px 16px;height:300px;overflow:auto;font:500 .86rem/1.5 var(--mono)}
+.term p{margin:0 0 8px}.term .who{font-weight:700;color:var(--saffron)}.term .u .who{color:#9fd3ff}.term .tool{color:#b8b0a2;font-size:.8rem}
+.term .empty{color:#8f877a}
+.intake h3{font:800 1.25rem/1.1 "Bricolage Grotesque",sans-serif;display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.intake .sub{font:500 .8rem/1.4 var(--mono);color:var(--ink2);margin-bottom:12px}
+.fields{display:grid;grid-template-columns:minmax(120px,38%) 1fr;border-top:2px solid var(--ink)}
+.fields dt,.fields dd{padding:8px 6px;border-bottom:1px solid var(--rule);font-size:.95rem}
+.fields dt{font:700 .74rem/1.3 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ink2);padding-top:11px}
+.fields dd{min-height:2.2em;word-break:break-word}
+.fields dd:empty:after{content:"\2014";color:var(--rule)}
+.fields dd.fresh{animation:fill 1.6s ease-out}
+@keyframes fill{0%{background:var(--marker)}100%{background:transparent}}
+.pill{display:inline-block;font:700 .75rem/1 var(--mono);padding:5px 8px;border:2px solid var(--ink);border-radius:3px;text-transform:uppercase}
+.pill.urgent{background:var(--red);color:var(--card)}.pill.standard{background:var(--card)}
+.ref{font:700 1.15rem var(--mono);letter-spacing:.05em}
+.after{display:none;margin-top:12px;font-size:.92rem;color:var(--ink2)}
+section{padding:26px 0}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.grid .card h3{font:800 1.08rem/1.2 "Bricolage Grotesque",sans-serif;margin-bottom:6px}
+.grid .card p{font-size:.95rem;color:var(--ink)}
+.cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:18px}
+.cta a{display:inline-block;text-decoration:none;font-weight:800;border:var(--bw) solid var(--ink);border-radius:4px;padding:14px 18px;box-shadow:4px 4px 0 var(--ink)}
+.cta .p{background:var(--ink);color:var(--card)}.cta .s{background:var(--saffron)}
+.msg{margin-top:12px;font:500 .88rem/1.45 var(--mono);color:var(--red)}
+footer{padding:28px 0 60px;color:var(--ink2);font-size:.9rem}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the demo</a>
+<main id="main">
+<header class="wrap">
+  <span class="kicker">Live demo · Voice AI on Retell</span>
+  <h1>Call a law firm's AI receptionist.</h1>
+  <p class="lede">It answers, works out the practice area, asks the <mark>conflict-check</mark> question, marks deadline cases as urgent, reads back a reference and fills in the intake note while you talk. Built by Firas Dahmani for agencies that sell voice AI to UK law firms.</p>
+  <p class="note">Quillmere Solicitors is fictional. Use made-up details. You need a microphone; calls stop after 5 minutes and are deleted after 30 days.</p>
+</header>
+
+<div class="wrap stage">
+  <div class="card">
+    <div class="controls">
+      <button id="start" type="button" disabled><span class="dot" aria-hidden="true"></span>Loading…</button>
+      <button id="mute" type="button" hidden>Mute</button>
+      <button id="end" type="button" hidden>End call</button>
+    </div>
+    <div class="status" role="status" aria-live="polite"><span class="lamp" id="lamp"></span><span id="status">Getting the line ready…</span><span class="clock" id="clock"></span></div>
+    <div class="msg" id="msg" hidden></div>
+    <div class="try"><b>Things to try</b>
+      <ul>
+        <li>I was dismissed in September after raising a safety complaint.</li>
+        <li>We're buying a house. How much do you charge?</li>
+        <li>I slipped in a supermarket in 2023. Do I have a case?</li>
+        <li>My son's been arrested. Can you help?</li>
+        <li>Am I talking to a real person?</li>
+      </ul>
+    </div>
+    <div class="term" id="term" aria-live="polite" aria-label="Live transcript"><p class="empty">The live transcript appears here once the call starts.</p></div>
+  </div>
+
+  <div class="card intake" aria-live="polite">
+    <h3>Intake note <span class="pill standard" id="urgPill" hidden>standard</span></h3>
+    <p class="sub">Filled in during the call by the agent's extraction tool. On a real line this goes to the firm's case management system by webhook.</p>
+    <dl class="fields">
+      <dt>Client</dt><dd id="f_client_status"></dd>
+      <dt>Name</dt><dd id="f_caller_name"></dd>
+      <dt>Callback</dt><dd id="f_callback_number"></dd>
+      <dt>Email</dt><dd id="f_email"></dd>
+      <dt>Area</dt><dd id="f_practice_area"></dd>
+      <dt>Summary</dt><dd id="f_matter_summary"></dd>
+      <dt>Other side (conflict check)</dt><dd id="f_other_party"></dd>
+      <dt>Key date</dt><dd id="f_key_date"></dd>
+      <dt>Urgency</dt><dd id="f_urgency"></dd>
+      <dt>Call back</dt><dd id="f_callback_time"></dd>
+      <dt>Reference</dt><dd id="f_reference" class="ref"></dd>
+    </dl>
+    <p class="after" id="after">That's the whole intake. After the call, Retell's post-call analysis also scores whether the intake is complete, ready for a CRM, a Slack alert or a callback queue.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2>What's under the hood</h2>
+    <div class="grid">
+      <div class="card"><h3>One Retell agent</h3><p>A single-prompt agent with a British voice in en-GB, on a fast model with low temperature. Silence timeout and a 5-minute cap.</p></div>
+      <div class="card"><h3>Live extraction</h3><p>An extract-variable tool fills the intake fields during the call, and a code tool issues the reference. No server needed for the demo.</p></div>
+      <div class="card"><h3>Post-call data</h3><p>Area, urgency, the other side, a summary and a completeness flag come back as structured fields, ready to push into Clio or any CRM by webhook.</p></div>
+      <div class="card"><h3>Guardrails</h3><p>It says it's an AI, never gives advice or quotes fees, sends anyone in danger to 999 and refers areas the firm doesn't cover to the Law Society.</p></div>
+    </div>
+    <div class="cta">
+      <a class="p" href="mailto:firas1dahmani@gmail.com?subject=Voice%20agent%20builds">Email me about your builds</a>
+      <a class="s" href="../">How I work with agencies</a>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="wrap">Firas Dahmani · software engineer, UTC+1 · This page runs Retell's web SDK in your browser; the call audio goes to Retell, not to me.</footer>
+
+<script type="module">
+const CFG = { key: "public_key_29007cd2dc78205c30e7f", agent: "agent_eac1c30149d08a5c0b8dca6e16", version: "latest_published" };
+const SDK_URLS = ["https://esm.sh/retell-client-js-sdk@3.0.4", "https://cdn.jsdelivr.net/npm/retell-client-js-sdk@3.0.4/+esm"];
+const DAILY_LIMIT = 6, MAX_MS = 300000;
+const $ = (s) => document.querySelector(s);
+const startBtn = $("#start"), endBtn = $("#end"), muteBtn = $("#mute");
+const statusEl = $("#status"), lamp = $("#lamp"), clock = $("#clock"), term = $("#term"), msg = $("#msg");
+const AREA = { family: "Family", conveyancing: "Conveyancing", wills_probate: "Wills & probate", employment: "Employment", personal_injury: "Personal injury", not_covered: "Not covered (referred on)" };
+let Client = null, call = null, muted = false, t0 = 0, tick = null, filled = {};
+
+const setStatus = (text, cls) => { statusEl.textContent = text; lamp.className = "lamp" + (cls ? " " + cls : ""); };
+const showMsg = (html) => { msg.innerHTML = html; msg.hidden = !html; };
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const ready = (label = "Start the call") => { startBtn.disabled = false; startBtn.innerHTML = '<span class="dot" aria-hidden="true"></span>' + label; };
+
+function usedToday() {
+  try { const d = JSON.parse(localStorage.getItem("qm_calls") || "{}"); const k = new Date().toISOString().slice(0, 10); return [d[k] || 0, k, d]; }
+  catch { return [0, "", {}]; }
+}
+function countCall() { const [n, k, d] = usedToday(); if (k) { d[k] = n + 1; localStorage.setItem("qm_calls", JSON.stringify({ [k]: d[k] })); } }
+
+function setField(name, value) {
+  if (value === undefined || value === null || value === "" || filled[name] === value) return;
+  const el = document.getElementById("f_" + name); if (!el) return;
+  filled[name] = value;
+  if (name === "practice_area") value = AREA[value] || value;
+  if (name === "client_status") value = value === "existing" ? "Existing client" : "New enquiry";
+  if (name === "urgency") {
+    const pill = $("#urgPill"); pill.hidden = false; pill.textContent = value; pill.className = "pill " + (value === "urgent" ? "urgent" : "standard");
+    value = value === "urgent" ? "Urgent" + (filled.urgency_reason ? ": " + filled.urgency_reason : "") : "Standard";
+  }
+  el.textContent = value; el.classList.remove("fresh"); void el.offsetWidth; el.classList.add("fresh");
+}
+
+function render(items) {
+  const rows = [];
+  for (const it of items || []) {
+    if (it.role === "agent" || it.role === "user") {
+      if (!it.content) continue;
+      rows.push(`<p class="${it.role === "user" ? "u" : "a"}"><span class="who">${it.role === "user" ? "You" : "Receptionist"}:</span> ${esc(it.content)}</p>`);
+      if (it.role === "agent") { const m = /\bQ\W{0,3}M\W{0,3}(\d)\W{0,2}(\d)\W{0,2}(\d)\W{0,2}(\d)\b/i.exec(it.content); if (m && !filled.reference) setField("reference", "QM-" + m.slice(1).join("")); }
+    } else if (it.role === "tool_call_invocation") {
+      if (it.name === "save_intake") {
+        try { const a = JSON.parse(it.arguments || "{}"); if (a.urgency_reason) filled.urgency_reason = a.urgency_reason; for (const [k, v] of Object.entries(a)) setField(k, v); } catch {}
+      }
+      if (it.name !== "end_call") rows.push(`<p class="tool">→ ${esc(it.name)}</p>`);
+    } else if (it.role === "tool_call_result") {
+      try { const r = JSON.parse(it.content || "{}"); if (r.reference) { setField("reference", r.reference); rows.push(`<p class="tool">← reference ${esc(r.reference)}</p>`); } } catch {}
+    }
+  }
+  if (rows.length) { term.innerHTML = rows.join(""); term.scrollTop = term.scrollHeight; }
+}
+
+if (new URLSearchParams(location.search).has("selftest")) window.__testRender = render;
+
+function resetUi() {
+  clearInterval(tick); tick = null; clock.textContent = "";
+  endBtn.hidden = true; muteBtn.hidden = true; muted = false; muteBtn.textContent = "Mute";
+  ready("Call again");
+}
+
+async function start() {
+  showMsg("");
+  const [n] = usedToday();
+  if (n >= DAILY_LIMIT) { showMsg('You\'ve used today\'s demo calls on this browser. <a href="mailto:firas1dahmani@gmail.com?subject=Voice%20demo">Email me</a> for a recording or a private line.'); return; }
+  startBtn.disabled = true; startBtn.textContent = "Connecting…"; t0 = 0;
+  filled = {}; document.querySelectorAll(".fields dd").forEach((d) => (d.textContent = "")); $("#urgPill").hidden = true; $("#after").style.display = "none";
+  term.innerHTML = '<p class="empty">Connecting… allow the microphone when your browser asks.</p>';
+  setStatus("Connecting… allow the microphone", "");
+  const params = new URLSearchParams(location.search);
+  const opts = {
+    agent_id: CFG.agent, transcript: true,
+    metadata: { source: "voice-demo", from: (params.get("from") || "").slice(0, 40), referrer: (document.referrer || "").slice(0, 120) },
+    hooks: {
+      onStatus: (s) => {
+        if (s === "live") {
+          countCall();
+          setStatus("Live. The receptionist speaks first.", "live"); endBtn.hidden = false; muteBtn.hidden = false; startBtn.textContent = "On a call";
+          t0 = Date.now(); tick = setInterval(() => { const ms = Date.now() - t0; const left = Math.max(0, MAX_MS - ms); clock.textContent = `${Math.floor(ms / 60000)}:${String(Math.floor(ms / 1000) % 60).padStart(2, "0")} / 5:00`; if (!left) clearInterval(tick); }, 500);
+        }
+      },
+      onAgentStartTalking: () => setStatus("Receptionist is speaking…", "talk"),
+      onAgentStopTalking: () => setStatus("Your turn. Just talk.", "live"),
+      onTranscript: (t) => render(t),
+      onEnd: (ev) => { if (!t0) { resetUi(); call = null; return; } setStatus("Call ended" + (ev && ev.disconnection_reason ? ` (${ev.disconnection_reason.replace(/_/g, " ")})` : ""), ""); $("#after").style.display = "block"; resetUi(); call = null; },
+      onError: (err) => { console.error(err); showMsg("The call couldn't start: " + esc(String(err && err.message ? err.message : err).replace(/\.+$/, "")) + '. Try Chrome or Edge, check the microphone, or <a href="mailto:firas1dahmani@gmail.com?subject=Voice%20demo">email me</a>.'); setStatus("Not connected", ""); resetUi(); call = null; },
+    },
+  };
+  if (CFG.version !== "") opts.agent_version = /^\d+$/.test(CFG.version) ? Number(CFG.version) : CFG.version;
+  try {
+    const client = new Client({ key: CFG.key });
+    call = client.createWebCall(opts);
+    call.startAudioPlayback && call.startAudioPlayback().catch(() => {});
+  } catch (err) { opts.hooks.onError(err); }
+}
+
+endBtn.addEventListener("click", async () => { endBtn.disabled = true; try { await call?.end(); } catch {} endBtn.disabled = false; });
+muteBtn.addEventListener("click", () => { if (!call) return; muted = !muted; muted ? call.mute() : call.unmute(); muteBtn.textContent = muted ? "Unmute" : "Mute"; });
+startBtn.addEventListener("click", start);
+
+function fallbackWidget() {
+  const s = document.createElement("script");
+  Object.assign(s, { id: "retell-widget", type: "module", src: "https://dashboard.retellai.com/retell-widget-v2.js" });
+  s.dataset.voicePublicKey = CFG.key; s.dataset.voiceAgentId = CFG.agent; if (CFG.version !== "") s.dataset.agentVersion = CFG.version;
+  s.dataset.title = "Quillmere Solicitors (demo)"; s.dataset.fabText = "Call the receptionist"; s.dataset.color = "#17140F";
+  document.head.appendChild(s);
+  startBtn.hidden = true; setStatus("Use the 'Call the receptionist' button at the bottom right.", "live");
+}
+
+(async () => {
+  for (const u of SDK_URLS) { try { const m = await import(u); if (m.RetellClient) { Client = m.RetellClient; break; } } catch (e) { console.warn("SDK failed to load from", u, e); } }
+  window.__demo = { sdk: !!Client, agent: CFG.agent };
+  if (Client) { ready(); setStatus("Ready when you are.", ""); }
+  else fallbackWidget();
+  if (!navigator.mediaDevices || !window.isSecureContext) showMsg("Your browser can't share a microphone on this page. Try Chrome, Edge or Safari over https.");
+})();
+</script>
+</body>
+</html>
